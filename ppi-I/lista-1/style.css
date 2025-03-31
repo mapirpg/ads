@@ -1,0 +1,72 @@
+/* Crie um arquivo CSS externo e vincule aos 3 arquivos HTML.
+Estilize os documentos, crie regras com propriedades algumas delas::
+Fundo da página com background-color
+Cor 
+Fonte geral (font-family: Arial, sans-serif;)
+Tabela com bordas (border), espado texto principal (color)çamento (padding)
+Formulário com inputs arredondados (border-radius), margens e cores nos botões (background-color, hover)
+Use um seletor de :hover para melhorar a usabilidade nos links do menu e botões do formulário. */
+
+/* CSS externo vinculado aos arquivos HTML */
+/* Estilização geral do corpo da página */
+
+body {
+  background-color: #f5f5f5;
+  color: #333;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+}
+
+/* Estilização dos links e menu */
+a {
+  color: #0066cc;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: #004080;
+}
+
+/* Estilização das tabelas */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+/* Estilização de formulários */
+form {
+  margin: 20px 0;
+}
+
+input, select, textarea {
+  padding: 8px;
+  margin: 5px 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+button, input[type="submit"], input[type="button"] {
+  background-color: #0066cc;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover, input[type="submit"]:hover, input[type="button"]:hover {
+  background-color: #004080;
+}
