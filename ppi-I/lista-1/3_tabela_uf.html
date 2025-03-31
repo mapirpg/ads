@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=100%, initial-scale=1.0">
+  <title>Estados Brasileiros</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      padding: 8px;
+      text-align: left;
+      border: 1px solid #ddd;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    #estados-table {
+      border: 1px solid #000;
+    }
+  </style>
+</head>
+<body>
+  <!-- 
+    Crie uma tabela com as colunas : índice, região, nome, estado, sigla, nome e capital.
+    Agrupe as linhas do mesma região (Rowspan)
+    Adicione link para wikipedia de cada estado.
+  -->
+
+  <h1>Tabela de Estados Brasileiros</h1>
+
+  <table id="estados-table">
+    <tr>
+      <th>Índice</th>
+      <th>Região</th>
+      <th>Nome</th>
+      <th>Estado</th>
+      <th>Sigla</th>
+      <th>Capital</th>
+    </tr>
+  </table>
+
+  <script>
+    const estados = [
+      { regiao: "Norte", indice: 1, nome: "Acre", sigla: "AC", capital: "Rio Branco" },
+      { regiao: "Norte", indice: 1, nome: "Amapá", sigla: "AP", capital: "Macapá" },
+      { regiao: "Norte", indice: 1, nome: "Amazonas", sigla: "AM", capital: "Manaus" },
+      { regiao: "Norte", indice: 1, nome: "Pará", sigla: "PA", capital: "Belém" },
+      { regiao: "Norte", indice: 1, nome: "Rondônia", sigla: "RO", capital: "Porto Velho" },
+      { regiao: "Norte", indice: 1, nome: "Roraima", sigla: "RR", capital: "Boa Vista" },
+      { regiao: "Norte", indice: 1, nome: "Tocantins", sigla: "TO", capital: "Palmas" },
+      { regiao: "Nordeste", indice: 2, nome: "Alagoas", sigla: "AL", capital: "Maceió" },
+      { regiao: "Nordeste", indice: 2, nome: "Bahia", sigla: "BA", capital: "Salvador" },
+      { regiao: "Nordeste", indice: 2, nome: "Ceará", sigla: "CE", capital: "Fortaleza" },
+      { regiao: "Nordeste", indice: 2, nome: "Maranhão", sigla: "MA", capital: "São Luís" },
+      { regiao: "Nordeste", indice: 2, nome: "Paraíba", sigla: "PB", capital: "João Pessoa" },
+      { regiao: "Nordeste", indice: 2, nome: "Pernambuco", sigla: "PE", capital: "Recife" },
+      { regiao: "Nordeste", indice: 2, nome: "Piauí", sigla: "PI", capital: "Teresina" },
+      { regiao: "Nordeste", indice: 2, nome: "Rio Grande do Norte", sigla: "RN", capital: "Natal" },
+      { regiao: "Nordeste", indice: 2, nome: "Sergipe", sigla: "SE", capital: "Aracaju" },
+      { regiao: "Centro-Oeste", indice: 3, nome: "Distrito Federal", sigla: "DF", capital: "Brasília" },
+      { regiao: "Centro-Oeste", indice: 3, nome: "Goiás", sigla: "GO", capital: "Goiânia" },
+      { regiao: "Centro-Oeste", indice: 3, nome: "Mato Grosso", sigla: "MT", capital: "Cuiabá" },
+      { regiao: "Centro-Oeste", indice: 3, nome: "Mato Grosso do Sul", sigla: "MS", capital: "Campo Grande" },
+      { regiao: "Sudeste", indice: 4, nome: "Espírito Santo", sigla: "ES", capital: "Vitória" },
+      { regiao: "Sudeste", indice: 4, nome: "Minas Gerais", sigla: "MG", capital: "Belo Horizonte" },
+      { regiao: "Sudeste", indice: 4, nome: "Rio de Janeiro", sigla: "RJ", capital: "Rio de Janeiro" },
+      { regiao: "Sudeste", indice: 4, nome: "São Paulo", sigla: "SP", capital: "São Paulo" },
+      { regiao: "Sul", indice: 5, nome: "Paraná", sigla: "PR", capital: "Curitiba" },
+      { regiao: "Sul", indice: 5, nome: "Rio Grande do Sul", sigla: "RS", capital: "Porto Alegre" },
+      { regiao: "Sul", indice: 5, nome: "Santa Catarina", sigla: "SC", capital: "Florianópolis" }
+    ];
+
+    const regioes = {};
+    estados.forEach(estado => {
+      if (!regioes[estado.regiao]) {
+        regioes[estado.regiao] = [];
+      }
+      regioes[estado.regiao].push(estado);
+    });
+
+    let tabelaHTML = '';
+    
+    Object.keys(regioes).forEach(regiao => {
+      const estadosDaRegiao = regioes[regiao];
+      
+      const linhas = estadosDaRegiao.map((estado, index) => {
+        if (index === 0) {
+          return `
+            <tr>
+              <td rowspan="${estadosDaRegiao.length}">${estado.indice}</td>
+              <td rowspan="${estadosDaRegiao.length}">${estado.regiao}</td>
+              <td><a href="https://pt.wikipedia.org/wiki/${encodeURIComponent(estado.nome)}">${estado.nome}</a></td>
+              <td>${estado.nome}</td>
+              <td>${estado.sigla}</td>
+              <td>${estado.capital}</td>
+            </tr>
+          `;
+        } else {
+          return `
+            <tr>
+              <td><a href="https://pt.wikipedia.org/wiki/${encodeURIComponent(estado.nome)}">${estado.nome}</a></td>
+              <td>${estado.nome}</td>
+              <td>${estado.sigla}</td>
+              <td>${estado.capital}</td>
+            </tr>
+          `;
+        }
+      }).join('');
+      
+      tabelaHTML += linhas;
+    });
+    
+    document.getElementById('estados-table').innerHTML = document.querySelector('#estados-table tr').outerHTML + tabelaHTML;
+  </script>
+</body>
+</html>      
