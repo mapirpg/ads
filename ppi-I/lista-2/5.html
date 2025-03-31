@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    #ul-a{
+      display: flex;
+      flex-direction: column;
+    }
+    #ul-b{
+      display: flex;
+      flex-direction: row;
+    }
+    .wrapper{
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
+    #box-c{
+      display: flex;
+      width: 450px;
+      height: 450px;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+    .box-c{
+      width: 75px;
+      height: 75px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+    }
+    .li-a{
+      height: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .li-b{
+      height: 50px;
+      width: 25%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    #li-a-1, #li-b-1, #box1{
+      background-color: #6500fd;
+    }
+    #li-a-2, #li-b-2, #box2{
+      background-color: #009615;
+    }
+    #li-a-3, #li-b-3, #box3{
+      background-color: #ff0000;
+    }
+    #li-a-4, #li-b-4, #box4{
+      background-color: #f0ff28;
+    }
+    #box5{
+      background-color: #ff00f2;
+      display: flex;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+  </style>
+</head>
+<body>
+  <p>
+    a&#41;
+  </p>
+  <!--
+    R) O elemento <ul> é renderizado como uma lista não ordenada, e os itens dentro dela são exibidos em coluna, pois o estilo CSS define a propriedade display como flex e a direção como column. Isso faz com que os itens sejam exibidos um abaixo do outro, em vez de lado a lado. Além disso, cada item da lista tem uma altura fixa e é centralizado verticalmente e horizontalmente.
+  -->
+  <ul id="ul-a">
+    <li class="li-a" id="li-a-1">1</li>
+    <li class="li-a" id="li-a-2">2</li>
+    <li class="li-a" id="li-a-3">3</li>
+    <li class="li-a" id="li-a-4">4</li>
+  </ul>
+
+  <hr/>
+  
+
+
+  <p>
+    b&#41;
+  </p>
+  <!--
+    R) O elemento <ul> é renderizado como uma lista não ordenada, e os itens dentro dela são exibidos em linha, pois o estilo CSS define a propriedade display como flex e a direção como row. Isso faz com que os itens sejam exibidos lado a lado, em vez de um abaixo do outro. Além disso, cada item da lista tem uma altura fixa e é centralizado verticalmente e horizontalmente. 
+  -->
+  <ul id="ul-b">
+    <li class="li-b" id="li-b-1">1</li>
+    <li class="li-b" id="li-b-2">2</li>
+    <li class="li-b" id="li-b-3">3</li>
+    <li class="li-b" id="li-b-4">4</li>
+  </ul>
+
+  <hr/>
+
+  <p>
+    c&#41;
+  </p>
+  <!-- 
+    R) O elemento <div> com o id "box-c" é renderizado como um contêiner flexível que contém outros elementos. Ele tem uma largura e altura definidas, e os elementos dentro dele são organizados em linhas e colunas, com espaço entre eles. Os elementos dentro do contêiner são exibidos como caixas, cada uma com uma largura e altura fixas. A propriedade flex-wrap permite que os elementos se movam para a próxima linha quando não houver espaço suficiente na linha atual.
+  -->
+  <div id="box-c">
+    <div class="wrapper">
+      <div class="box-c" id="box1">box1</div>
+      <div class="box-c" id="box2">box2</div>
+    </div>
+
+    <div class="box-c" id="box5">box5</div>
+        
+    <div class="wrapper">
+      <div class="box-c" id="box3">box3</div>
+      <div class="box-c" id="box4">box4</div>
+    </div>
+  </div>
+
+</body>
+</html>
