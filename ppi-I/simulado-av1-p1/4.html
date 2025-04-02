@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    #layout {
+      display: grid;
+      grid-template-columns: 1fr 2fr 1fr;
+      grid-template-rows: auto 1fr auto;
+      grid-template-areas:
+        "banner banner banner"
+        "menu products login"
+        "footer footer footer";
+      height: 100vh;
+    }
+    .withBorder {
+      border: 1px solid black;
+    }
+    #sideCard {
+      margin-top: 50%;
+      border-radius: 20px;
+      margin-bottom: 10%;
+      padding: 10px;
+    }
+    #textInput {
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+    #productsList {
+      grid-area: 'products'; 
+      height: 50px;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      padding-left: 20px;
+    }
+    #content {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      margin: 10px;
+      text-align: center;
+    }
+    #image {
+      width: 60%;
+      height: 20%;
+      align-self: center;
+    }
+  </style>
+</head>
+<body>
+  <main id="layout">
+
+  <div style="grid-area: banner; height: 100px;" class="withBorder">
+    Banner
+  </div>
+
+  <div style="grid-area: menu" id="sideCard" class="withBorder">
+    <p style="margin-bottom: 50px;">Menu</p>
+    <p>Home</p>
+    <p>Sobre</p>
+    <p>Contatos</p>
+  </div>
+
+  <div id="content">
+    <div>
+      Lorem Title
+    </div>
+    <div>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus.
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus.
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus.
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus.
+    </div>
+    <img src="https://http2.mlstatic.com/D_NQ_NP_867753-MLB41934855985_052020-O.webp" id="image"/>
+    <div id="productsList" class="withBorder">
+      Products List
+    </div>
+  </div>
+    
+  <div style="grid-area: login;" id="sideCard" class="withBorder">
+    <input type="text" placeholder="Email" id="textInput">
+    <input type="password" placeholder="Senha" id="textInput">
+    <button>Entrar</button>
+  </div>
+
+  <footer style="grid-area: footer; height: 100px;" class="withBorder">
+    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Accusamus totam rerum numquam dolorem autem, suscipit at quos doloremque odio, minus iste sequi blanditiis ipsum enim saepe, quidem atque fugiat repellendus?
+  </footer>
+</main>
+</body>
+</html>
