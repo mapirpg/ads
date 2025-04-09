@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Produtos - Tintas Perin</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <h1>Bem-vindo à Tintas Perin</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="produtos.html">Produtos</a>
+      <a href="contato.html">Contato</a>
+      <a href="carrinho.html">Carrinho</a>
+    </nav>
+  </header>
+  
+  <main>
+    <h2>Carrinho</h2>
+    <section id="cart-list"></section>
+  </main>
+
+  <button id="clear-cart-button" class="button">
+    Esvaziar Carrinho
+  </button>
+  
+  <footer>
+    <p>&copy; 2025 Tintas Perin. Todos os direitos reservados.</p>
+  </footer> 
+  
+  <script type="module" >
+    import { getItem, saveItem, removeItem } from "./storage.js";
+
+    const cartItems = getItem('cart') || []
+    const cartList = document.getElementById('cart-list')
+
+    const renderCart = () => {
+      cartItems.forEach((item) => {
+        const listItem = document.createElement('div')
+        listItem.innerHTML = `
+          <img src="${item.image}" alt="${item.name}">
+          <div>${item.name}</div>
+          <div>R$ ${item.price}</div>
+          <button class="remove-item" id="${item.id}">Remover</button>
+        `
+        cartList.appendChild(listItem)
+      })
+    }
+
+    const removePress = (e) => {
+      const items = getItem('cart') || []
+      const newItems = items.filter((item) => item.id !== e.target.id)
+      saveItem('cart', newItems)
+      alert('Produto removido do carrinho!')
+      window.location.reload()
+    }
+
+    renderCart()
+
+    const removeButtons = document.querySelectorAll('.remove-item')
+    removeButtons.forEach((button) => {
+      button.addEventListener('click', removePress)
+    })
+
+    const clearCartButton = document.getElementById('clear-cart-button')
+    clearCartButton.addEventListener('click', () => {
+      removeItem('cart', [])
+      alert('Carrinho esvaziado!')
+      window.location.reload()
+    })
+
+  </script>
+</body>
+</html>

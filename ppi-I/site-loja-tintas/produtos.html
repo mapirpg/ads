@@ -8,17 +8,48 @@
 
 </head>
 <body>
-  <div id="header-component"></div>
+  <header>
+    <h1>Bem-vindo à Tintas Perin</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="produtos.html">Produtos</a>
+      <a href="contato.html">Contato</a>
+      <a href="carrinho.html">Carrinho</a>
+    </nav>
+  </header>
+
   <main>
     <section>
       <h2>Nossos Produtos</h2>
       <p>Oferecemos uma ampla variedade de tintas para atender todas as suas necessidades.</p>
-      <div id="products" style="flex-wrap: wrap;" />
+      <div id="products" style="display: flex; flex: 1; flex-wrap: wrap; gap: 50px;" />
     </section>
   </main>
-  <div id="footer-component"></div>
-  <script src="js/components.js"></script>
-  <script src="js/global.js"></script>
-  <script src="js/produtos.js"></script>
+
+  <footer>
+    <p>&copy; 2025 Tintas Perin. Todos os direitos reservados.</p>
+  </footer>
+
+  <script src="js/index.js"></script>
+  <script type="module">
+    const renderProducts = () => {
+      const productsList = document.getElementById('products')
+
+      products.forEach((product, index) => {
+        productsList.innerHTML += `
+          <div 
+            id="product-card" 
+            onclick="handleProductNavigate('${product.id}')"
+          >
+            <h3>${product.name}</h3>
+            <img src="https://i.pravatar.cc/150?img=${index + 1}"/>
+            <p>Preço: R$ ${product.price.toFixed(2).replace('.', ',')}</p>
+          </div>
+        `
+      })
+    } 
+
+    renderProducts()
+  </script>
 </body>
 </html>

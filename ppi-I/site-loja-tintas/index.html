@@ -6,20 +6,72 @@
   <title>Tintas Perin</title>
   <link rel="stylesheet" href="css/style.css">
 <body>
-  <div id="header-component"></div>
+  <header>
+    <h1>Bem-vindo à Tintas Perin</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="produtos.html">Produtos</a>
+      <a href="contato.html">Contato</a>
+      <a href="carrinho.html">Carrinho</a>
+    </nav>
+  </header>
   
   <main>
     <section id="products" >
       <h2>Nossos Produtos</h2>
-      <p>Oferecemos uma ampla variedade de tintas para atender todas as suas necessidades.</p>
-      <div id="productsList" />
+      <div id="products-list"></div>
     </section>
   </main>
   
-  <div id="footer-component"></div>
+  <footer>
+    <p>&copy; 2025 Tintas Perin. Todos os direitos reservados.</p>
+  </footer>  
   
-  <script src="js/components.js"></script>
-  <script src="js/global.js"></script>
   <script src="js/index.js"></script>
+  <script>
+    const productsList = document.getElementById('products-list')
+    const renderProducts = () => {
+      products.forEach((product, index) => {
+        const productItem = document.createElement('div')
+        productItem.id = 'product-card'
+        productItem.onclick = () => handleProductNavigate(product.id)
+      
+        productItem.innerHTML = `
+            <h3>
+              ${product.name}
+            </h3>
+            ${ product.image ? `<img src="${product.image}" alt="${product.name}"/>` : '' }
+            <p>
+              Preço: R$ ${product.price.toFixed(2).replace('.', ',')}
+            </p>
+        `
+        productsList.appendChild(productItem)
+      })
+    }
+
+    const autoScrollProductsList = () => {
+      const currentPosition = productsList.scrollLeft
+      const scrollWidth = productsList.scrollWidth - productsList.clientWidth
+      const scrollStep = scrollWidth / products.length
+      const nextPosition = currentPosition + scrollStep
+      productsList.scrollTo({
+        left: nextPosition,
+        behavior: 'smooth',
+      })
+
+      if (nextPosition >= scrollWidth) {
+        productsList.scrollTo({
+          left: 0,
+          behavior: 'smooth',
+        })
+      }
+
+      setTimeout(autoScrollProductsList, 2)
+    }
+
+    renderProducts()
+    
+    autoScrollProductsList()
+  </script>
 </body>
 </html>
