@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Produtos</title>
+  <title>Tintas Perin | Produtos</title>
   <link rel="stylesheet" href="css/style.css">
 
 </head>
@@ -14,7 +14,7 @@
       <a href="index.html">Home</a>
       <a href="produtos.html">Produtos</a>
       <a href="contato.html">Contato</a>
-      <a href="carrinho.html">Carrinho</a>
+      <a id="cart-link" href="carrinho.html">Carrinho</a>
     </nav>
   </header>
 
@@ -30,8 +30,11 @@
     <p>&copy; 2025 Tintas Perin. Todos os direitos reservados.</p>
   </footer>
 
-  <script src="js/index.js"></script>
   <script type="module">
+    import { products, updateCartLink, handleProductNavigate } from './js/index.js'
+    
+    window.handleProductNavigate = handleProductNavigate;
+    
     const renderProducts = () => {
       const productsList = document.getElementById('products')
 
@@ -39,17 +42,19 @@
         productsList.innerHTML += `
           <div 
             id="product-card" 
-            onclick="handleProductNavigate('${product.id}')"
+            onclick="handleProductNavigate(${product.id})"	
           >
             <h3>${product.name}</h3>
-            <img src="https://i.pravatar.cc/150?img=${index + 1}"/>
+            <img src="${product.image}"/>
             <p>Preço: R$ ${product.price.toFixed(2).replace('.', ',')}</p>
           </div>
         `
       })
     } 
 
+
     renderProducts()
+    updateCartLink()
   </script>
 </body>
 </html>

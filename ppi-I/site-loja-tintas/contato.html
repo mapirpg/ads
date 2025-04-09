@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tintas Perin</title>
+  <title>Tintas Perin | Contato</title>
   <link rel="stylesheet" href="css/style.css">
 <body>
   <header>
@@ -12,7 +12,7 @@
       <a href="index.html">Home</a>
       <a href="produtos.html">Produtos</a>
       <a href="contato.html">Contato</a>
-      <a href="carrinho.html">Carrinho</a>
+      <a id="cart-link" href="carrinho.html">Carrinho</a>
     </nav>
   </header>
 
@@ -36,6 +36,11 @@
   
   <footer>
     <p>&copy; 2025 Tintas Perin. Todos os direitos reservados.</p>
-  </footer>  
+  </footer>
+
+  <script type="module">
+    import { updateCartLink } from './js/index.js'
+    updateCartLink()
+  </script>
   </body>
 </html>

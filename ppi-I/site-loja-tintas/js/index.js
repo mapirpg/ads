@@ -1,4 +1,6 @@
-const products = [
+import { getItem } from "../storage.js";
+
+export const products = [
   {id: '1', name: 'Tinta Acrílica', price: 50.00, description: 'Tinta acrílica de alta qualidade, ideal para artesanato e pintura em geral.'},
   {id: '2', name: 'Tinta Esmalte', price: 70.00, description: 'Tinta esmalte para acabamento em superfícies metálicas e madeira.'},
   {id: '3', name: 'Tinta Spray', price: 30.00, description: 'Tinta spray para aplicação rápida e uniforme em diversas superfícies.'},
@@ -14,6 +16,15 @@ const products = [
   {id: '13', name: 'Tinta para Gesso', price: 150.00, description: 'Tinta para gesso, com acabamento fosco e fácil aplicação.'},
 ].map((product) => ({...product, image: `https://i.pravatar.cc/150?img=${product.id}`}))
 
-const handleProductNavigate = (id) => {
+export const handleProductNavigate = (id) => {
   window.location.href = `produto.html?id=${id}`
+}
+
+export const updateCartLink = () => {
+  const cartItems = getItem('cart')
+  const cartLink = document.getElementById('cart-link')
+  
+  if (cartItems && cartItems.length > 0) {
+    cartLink.innerHTML += ` (${cartItems.length})`
+  }
 }

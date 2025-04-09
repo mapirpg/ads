@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Produtos - Tintas Perin</title>
+  <title>Tintas Perin | Carrinho</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -13,7 +13,7 @@
       <a href="index.html">Home</a>
       <a href="produtos.html">Produtos</a>
       <a href="contato.html">Contato</a>
-      <a href="carrinho.html">Carrinho</a>
+      <a id="cart-link" href="carrinho.html">Carrinho</a>
     </nav>
   </header>
   
@@ -31,6 +31,7 @@
   </footer> 
   
   <script type="module" >
+    import { updateCartLink } from './js/index.js'
     import { getItem, saveItem, removeItem } from "./storage.js";
 
     const cartItems = getItem('cart') || []
@@ -54,6 +55,7 @@
       const newItems = items.filter((item) => item.id !== e.target.id)
       saveItem('cart', newItems)
       alert('Produto removido do carrinho!')
+      updateCartLink()
       window.location.reload()
     }
 
@@ -68,9 +70,11 @@
     clearCartButton.addEventListener('click', () => {
       removeItem('cart', [])
       alert('Carrinho esvaziado!')
+      updateCartLink()
       window.location.reload()
     })
 
+    updateCartLink()
   </script>
 </body>
 </html>

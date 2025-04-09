@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tintas Perin</title>
+  <title>Tintas Perin | Home</title>
   <link rel="stylesheet" href="css/style.css">
 <body>
   <header>
@@ -12,13 +12,13 @@
       <a href="index.html">Home</a>
       <a href="produtos.html">Produtos</a>
       <a href="contato.html">Contato</a>
-      <a href="carrinho.html">Carrinho</a>
+      <a id="cart-link" href="carrinho.html">Carrinho</a>
     </nav>
   </header>
   
   <main>
     <section id="products" >
-      <h2>Nossos Produtos</h2>
+      <h2>Home</h2>
       <div id="products-list"></div>
     </section>
   </main>
@@ -27,8 +27,9 @@
     <p>&copy; 2025 Tintas Perin. Todos os direitos reservados.</p>
   </footer>  
   
-  <script src="js/index.js"></script>
-  <script>
+  <script type="module">
+    import { products, updateCartLink, handleProductNavigate } from './js/index.js'
+
     const productsList = document.getElementById('products-list')
     const renderProducts = () => {
       products.forEach((product, index) => {
@@ -68,9 +69,9 @@
 
       setTimeout(autoScrollProductsList, 2)
     }
-
-    renderProducts()
     
+    renderProducts()
+    updateCartLink()
     autoScrollProductsList()
   </script>
 </body>
