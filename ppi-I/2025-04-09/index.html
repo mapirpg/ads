@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+  </style>
+</head>
+<body>
+  <label for="min">Mínimo</label>
+  <input id="min" type="text" value="10"/>
+  <label for="max">Máximo</label>
+  <input id="max" type="text" value="20"/>
+  <p>Resultado: <span id="res"></span></p>
+
+  <img id="teste" />
+  
+  <script>
+    const min = document.getElementById('min')
+    const max = document.getElementById('max')
+    const res = document.getElementById('res')
+    const gen = (d, f) => f ? Math.floor(Math.random() * d) : Math.random() * d
+
+    document.addEventListener('keypress', () => {
+      const value = `rgb(${gen(256)},${gen(256)},${gen(256)})`
+      document.querySelector('body').style.backgroundColor = value
+      document.querySelector('#res').innerText = gen(100, false)
+    })
+
+  </script>
+</body>
+</html>
