@@ -4,20 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100svh;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        #relogio {
+            width: 200px;
+            height: 200px;
+            border: 1px solid black;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        #playButton, #pauseButton {
+            width: 50px;
+            height: 20px;
+        }
+    </style>
 </head>
 <body>
-    <div id="boxClock">
-        <div id="relogio">
-            <p id="tempo">
-                0.000
-            </p>
-            <div>
-                <button id="playButton">
-                    >
-                </button>
-            </div>
+    <div id="relogio">
+        <p id="tempo">
+            0.000
+        </p>
+        <div>
+            <button id="playButton">
+                >
+            </button>
         </div>
-    </div> 
+    </div>
     <script>
         let codIntervalo = 0
         let rodando = false
