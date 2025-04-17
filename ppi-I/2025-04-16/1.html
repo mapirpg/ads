@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="boxClock">
+        <div id="relogio">
+            <p id="tempo">
+                0.000
+            </p>
+            <div>
+                <button id="playButton">
+                    >
+                </button>
+            </div>
+        </div>
+    </div> 
+    <script>
+        let codIntervalo = 0
+        let rodando = false
+        let ePlay = document.querySelector("#playButton")
+
+        const atualizaHora = () => {
+            const agora = new Date();
+            const segundo = agora.getSeconds();
+            const miliSegundo = agora.getMilliseconds();
+            const relogio = `${segundo}:${miliSegundo}`;
+            const eRelogio = document.querySelector("#tempo");
+            eRelogio.innerHTML = relogio;
+        }
+
+        ePlay.innerHTML = ">"
+
+        const apertarPlay = () => {
+            if (rodando) {
+                ePlay.innerHTML = ">"
+                clearInterval(codIntervalo)
+                rodando = false
+            } else {
+                ePlay.innerHTML = "||"
+                codIntervalo = setInterval(atualizaHora, 1)
+                rodando = true
+            }
+        }
+
+        ePlay.onclick = apertarPlay
+    </script>
+    
+</body>
+</html>

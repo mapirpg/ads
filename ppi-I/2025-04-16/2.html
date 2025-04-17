@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id="getResponse">
+        Buscar Resposta
+    </button>
+    <div id="msg"></div>
+
+    <script>
+        const url = "https://api.chucknorris.io/jokes/random"
+        const dogUrl = "https://dog.ceo/api/breeds/image/random"
+        let lista = []
+
+        const inicio = () => {
+            if (localStorage.key("lista")) {
+                const storedLista = JSON.parse(localStorage.getItem("lista"))
+                lista = storedLista
+                const eMsg = document.querySelector("#msg")
+
+                storedLista.forEach(({text, image}) => {
+                    const eP = createP(text)
+                    const eImg = createImage(image)
+
+                    eMsg.appendChild(eP)
+                    eMsg.appendChild(eImg)
+                });
+            }
+        }
+
+
+        const createImage = (src) => {
+            const eImg = document.createElement("img")
+            eImg.src = src
+            eImg.style.width = "50px"
+            eImg.style.height = "50px"
+            return eImg
+        }
+
+        const createP = (text) => {
+            const eP = document.createElement("p")
+            eP.innerHTML = text
+            return eP
+        }
+
+        const promessa = async () => {
+            const eMsg = document.querySelector("#msg")
+            
+            const text = await fetch(url)
+            .then(res => res.json())
+            .then(data => {
+                const eP = createP(data.value)
+                eMsg.appendChild(eP)
+                return data.value
+            })
+
+            const image = await fetch(dogUrl)
+            .then(res => res.json())
+            .then(data => {
+                const eImg = createImage(data.message)
+                eMsg.appendChild(eImg)
+                return data.message
+            })
+
+            lista.push({ text, image })
+            localStorage.setItem("lista", JSON.stringify(lista))
+        }
+
+        const eBotaoPromessa = document.querySelector("#getResponse")
+        eBotaoPromessa.onclick = promessa
+        inicio()
+    </script>
+</body>
+</html>
