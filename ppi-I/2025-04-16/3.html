@@ -31,12 +31,12 @@
     </style>
 </head>
 <body>
-
-
     <p id="cotacao"></p>
     <button>Buscar Cotação</button>
 
     <script>
+        const formatCurrency =  (str) => Intl.NumberFormat('pt-br', {style: 'currency', currency: 'BRL'}).format(str)
+        
         let url = "https://economia.awesomeapi.com.br/json/last/BTC-BRL"
         let cotacao = document.querySelector("#cotacao")
         document.querySelector("button").addEventListener("click", getValueBitcoin)
@@ -44,7 +44,8 @@
         function getValueBitcoin () {
             fetch(url)
             .then(res => res.json())
-            .then(data => {
+            .then(({ BTCBRL: data }) => {
+
                 // {
                 //     "code": "BTC",
                 //     "codein": "BRL",
@@ -58,13 +59,11 @@
                 //     "timestamp": "1744850204",
                 //     "create_date": "2025-04-16 21:36:44"
                 // }
-                
-                
-            })
 
-                    
+                const eCotacao = document.querySelector("#cotacao")
+                eCotacao.innerHTML = formatCurrency(data.high)
+            })
         }
-        
         </script>
 </body>
 </html>
