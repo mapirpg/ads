@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Simples</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+            margin: 0;
+        }
+        
+        .calculator {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            width: 300px;
+        }
+        
+        .display {
+            background-color: #eee;
+            border: none;
+            border-radius: 5px;
+            font-size: 24px;
+            height: 60px;
+            margin-bottom: 20px;
+            padding: 10px;
+            text-align: right;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        
+        button {
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            color: black;
+            cursor: pointer;
+            font-size: 20px;
+            height: 50px;
+            transition: background-color 0.2s;
+        }
+        
+        button:hover {
+            background-color: #f1f1f1;
+        }
+        
+        .operator {
+            background-color: #ff9500;
+        }
+        
+        .operator:hover {
+            background-color: #ffaa33;
+        }
+        
+        .clear {
+            background-color: #ff3b30;
+        }
+        
+        .clear:hover {
+            background-color: #ff5e55;
+        }
+        
+        .equals {
+            background-color: #34c759;
+        }
+        
+        .equals:hover {
+            background-color: #4cd964;
+        }
+        
+        .zero {
+            grid-column: span 2;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <input type="text" class="display" id="display" readonly>
+        <div class="buttons">
+            <button class="clear" id="btnClear">C</button>
+            <button class="operator" id="btn(">(</button>
+            <button class="operator" id="btn)">)</button>
+            <button class="operator" id="btn/">/</button>
+            
+            <button id="btn7">7</button>
+            <button id="btn8">8</button>
+            <button id="btn9">9</button>
+            <button class="operator" id="btn*">*</button>
+            
+            <button id="btn4">4</button>
+            <button id="btn5">5</button>
+            <button id="btn6">6</button>
+            <button class="operator" id="btn-">-</button>
+            
+            <button id="btn1">1</button>
+            <button id="btn2">2</button>
+            <button id="btn3">3</button>
+            <button class="operator" id="btn+">+</button>
+            
+            <button class="zero" id="btn0">0</button>
+            <button id="btn.">.</button>
+            <button class="equals" id="calculate">=</button>
+        </div>
+    </div>
+
+    <script>
+      const display = document.getElementById('display');
+      const appendToDisplay = (value) => display.value += value;
+      const clearDisplay = () => display.value = '';
+      document.getElementById('btnClear').onclick = clearDisplay;
+      ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '+', '-', '*', '/', '.', '(', ')']
+      .forEach(id => document.getElementById(`btn1`).onclick = appendToDisplay.bind(null, 1));
+      document.getElementById('calculate').onclick = eval(display.value);
+    </script>
+</body>
+</html>

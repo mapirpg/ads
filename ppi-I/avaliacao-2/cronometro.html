@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cronômetro</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f0f0f0;
+    }
+    #display {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      font-family: monospace;
+    }
+    .buttons {
+      display: flex;
+      gap: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      background-color: #4caf50;
+      color: white;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    #pauseBtn {
+      background-color: #f44336;
+    }
+    #pauseBtn:hover {
+      background-color: #d32f2f;
+    }
+    #resetBtn {
+      background-color: #2196f3;
+    }
+    #resetBtn:hover {
+      background-color: #0b7dda;
+    }
+  </style>
+</head>
+<body>
+  <h1>Cronômetro</h1>
+  <div id="display">00:00:00.00</div>
+  <div class="buttons">
+    <button id="startBtn">Iniciar</button>
+    <button id="pauseBtn">Pausar</button>
+    <button id="resetBtn">Reiniciar</button>
+  </div>
+
+  <script>
+    let startTime;
+    let elapsedTime = 0;
+    let timerInterval;
+    let running = false;
+
+    const displayElement = document.getElementById('display');
+    const startBtn = document.getElementById('startBtn');
+    const pauseBtn = document.getElementById('pauseBtn');
+    const resetBtn = document.getElementById('resetBtn');
+
+    function formatTime(timeInMilliseconds) {
+      const date = new Date(timeInMilliseconds);
+      
+      const hours = date.getUTCHours().toString().padStart(2, '0');
+      const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+      const seconds = date.getUTCSeconds().toString().padStart(2, '0');
+      
+      const milliseconds = Math.floor(date.getUTCMilliseconds() / 10).toString().padStart(2, '0');
+      
+      return `${hours}:${minutes}:${seconds}.${milliseconds}`;
+    }
+
+    function updateDisplay() {
+      const currentTime = Date.now();
+      const totalElapsedTime = elapsedTime + (currentTime - startTime);
+      displayElement.textContent = formatTime(totalElapsedTime);
+    }
+
+    function startTimer() {
+      if (!running) {
+        running = true;
+        startTime = Date.now();
+        timerInterval = setInterval(updateDisplay, 10); // Update more frequently for milliseconds
+      }
+    }
+
+    function pauseTimer() {
+      if (running) {
+        running = false;
+        clearInterval(timerInterval);
+        elapsedTime += Date.now() - startTime;
+      }
+    }
+
+    function resetTimer() {
+      pauseTimer();
+      elapsedTime = 0;
+      displayElement.textContent = '00:00:00.00';
+    }
+
+    startBtn.addEventListener('click', startTimer);
+    pauseBtn.addEventListener('click', pauseTimer);
+    resetBtn.addEventListener('click', resetTimer);
+  </script>
+</body>
+</html>
