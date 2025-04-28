@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscador de Filmes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .movie-card {
+            margin-bottom: 20px;
+            transition: transform 0.2s;
+        }
+        .movie-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .movie-poster {
+            height: 300px;
+            object-fit: cover;
+        }
+        .loading {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container my-5">
+        <h1 class="text-center mb-4">Buscador de Filmes</h1>
+        
+        <div class="row justify-content-center mb-4">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <input type="text" id="searchInput" class="form-control" placeholder="Digite o nome do filme...">
+                    <button class="btn btn-primary" id="searchBtn">Buscar</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center loading" id="loadingIndicator">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Carregando...</span>
+            </div>
+            <p>Buscando filmes...</p>
+        </div>
+        
+        <div id="errorMessage" class="alert alert-danger text-center" style="display: none;"></div>
+        
+        <div class="row" id="resultsContainer"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('searchInput');
+            const searchBtn = document.getElementById('searchBtn');
+            const resultsContainer = document.getElementById('resultsContainer');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const errorMessage = document.getElementById('errorMessage');
+            
+            const API_KEY = '4a3b711b';
+            
+            searchBtn.addEventListener('click', performSearch);
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+            
+            const performSearch = async () => {
+                const query = searchInput.value.trim();
+                if (!query) {
+                    showError('Por favor, digite um termo de busca.');
+                    return;
+                }
+                
+                resultsContainer.innerHTML = '';
+                errorMessage.style.display = 'none';
+                loadingIndicator.style.display = 'block';
+                
+                const url = `https://www.omdbapi.com/?apikey=${API_KEY}&s=${encodeURIComponent(query)}`;
+                
+                try {
+                    const response = await fetch(url);
+                    
+                    if (!response.ok) {
+                        throw new Error('Erro na conexão com a API');
+                    }
+                    
+                    const data = await response.json();
+                    loadingIndicator.style.display = 'none';
+                    
+                    if (data.Response === 'False') {
+                        showError(data.Error === 'Movie not found!' ? 
+                            'Nenhum filme encontrado com esse termo.' : data.Error);
+                        return;
+                    }
+                    
+                    displayResults(data.Search);
+                } catch (error) {
+                    loadingIndicator.style.display = 'none';
+                    showError('Ocorreu um erro: ' + error.message);
+                }
+            }
+            
+            const displayResults = (movies) => {
+                if (!movies || movies.length === 0) {
+                    showError('Nenhum resultado encontrado.');
+                    return;
+                }
+                
+                movies.forEach(movie => {
+                    const movieCard = document.createElement('div');
+                    movieCard.className = 'col-md-4 col-lg-3 movie-card';
+                    
+                    const posterUrl = movie.Poster !== 'N/A' ? movie.Poster : 'https://via.placeholder.com/300x450?text=Sem+Poster';
+                    
+                    movieCard.innerHTML = `
+                        <div class="card h-100">
+                            <img src="${posterUrl}" class="card-img-top movie-poster" alt="${movie.Title}">
+                            <div class="card-body">
+                                <h5 class="card-title">${movie.Title}</h5>
+                                <p class="card-text">
+                                    <strong>Ano:</strong> ${movie.Year}<br>
+                                    <strong>Tipo:</strong> ${translateType(movie.Type)}
+                                </p>
+                                <button class="btn btn-sm btn-outline-primary details-btn" data-id="${movie.imdbID}">
+                                    Ver detalhes
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    resultsContainer.appendChild(movieCard);
+                    
+                    const detailsBtn = movieCard.querySelector('.details-btn');
+                    detailsBtn.addEventListener('click', () => {
+                        fetchMovieDetails(movie.imdbID);
+                    });
+                });
+            }
+            
+            const fetchMovieDetails = (imdbID) => {
+                const url = `https://www.omdbapi.com/?apikey=${API_KEY}&i=${imdbID}&plot=full`;
+                
+                loadingIndicator.style.display = 'block';
+                
+                fetch(url)
+                    .then(response => response.json())
+                    .then(movie => {
+                        loadingIndicator.style.display = 'none';
+                        
+                        const modalHtml = `
+                            <div class="modal fade" id="movieDetailModal" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">${movie.Title} (${movie.Year})</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <img src="${movie.Poster !== 'N/A' ? movie.Poster : 'https://via.placeholder.com/300x450?text=Sem+Poster'}" 
+                                                         class="img-fluid" alt="${movie.Title}">
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <p><strong>Diretor:</strong> ${movie.Director}</p>
+                                                    <p><strong>Elenco:</strong> ${movie.Actors}</p>
+                                                    <p><strong>Gênero:</strong> ${movie.Genre}</p>
+                                                    <p><strong>Duração:</strong> ${movie.Runtime}</p>
+                                                    <p><strong>País:</strong> ${movie.Country}</p>
+                                                    <p><strong>Classificação:</strong> ${movie.Rated}</p>
+                                                    <p><strong>IMDb:</strong> ${movie.imdbRating}</p>
+                                                    <p>${movie.Plot}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        
+                        const modalContainer = document.createElement('div');
+                        modalContainer.innerHTML = modalHtml;
+                        document.body.appendChild(modalContainer);
+                        
+                        const modal = new bootstrap.Modal(document.getElementById('movieDetailModal'));
+                        modal.show();
+                        
+                        document.getElementById('movieDetailModal').addEventListener('hidden.bs.modal', () => {
+                            this.remove();
+                        });
+                    })
+                    .catch(error => {
+                        loadingIndicator.style.display = 'none';
+                        showError('Erro ao buscar detalhes: ' + error.message);
+                    });
+            }
+            
+            const showError = (message) => {
+                errorMessage.textContent = message;
+                errorMessage.style.display = 'block';
+            }
+            
+            const translateType = (type) => {
+                const typeTranslations = {
+                    'movie': 'Filme',
+                    'series': 'Série',
+                    'episode': 'Episódio',
+                    'game': 'Jogo'
+                };
+                
+                return typeTranslations[type.toLowerCase()] || type;
+            }
+        });
+    </script>
+</body>
+</html>

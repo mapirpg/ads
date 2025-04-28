@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bloco de Notas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .note-item {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .note-item:hover {
+            background-color: #f8f9fa;
+        }
+        .note-list {
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4 col-lg-3 p-3 border-end note-list">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3>Minhas Notas</h3>
+                    <button id="newNoteBtn" class="btn btn-primary">Nova Nota</button>
+                </div>
+                <div id="notesList" class="list-group mt-3">
+                </div>
+            </div>
+            
+            <div class="col-md-8 col-lg-9 p-3">
+                <div id="noteEditor" class="d-none">
+                    <div class="mb-3 d-flex justify-content-between align-items-center">
+                        <input type="text" id="noteTitle" class="form-control form-control-lg" placeholder="Título da nota">
+                        <div class="ms-2">
+                            <button id="saveNoteBtn" class="btn btn-success">Salvar</button>
+                            <button id="deleteNoteBtn" class="btn btn-danger">Excluir</button>
+                        </div>
+                    </div>
+                    <textarea id="noteContent" class="form-control" rows="15" placeholder="Conteúdo da nota..."></textarea>
+                </div>
+                
+                <div id="welcomeMessage" class="text-center mt-5">
+                    <h3>Bem-vindo ao Bloco de Notas</h3>
+                    <p class="lead">Selecione uma nota para visualizar ou crie uma nova.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmar exclusão</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Tem certeza que deseja excluir esta nota?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Excluir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        class Note {
+            constructor(id, title, content, creationDate = new Date()) {
+                this.id = id;
+                this.title = title;
+                this.content = content;
+                this.creationDate = creationDate;
+            }
+        }
+
+        class NoteManager {
+            constructor() {
+                this.notes = [];
+                this.currentNote = null;
+                this.loadNotes();
+            }
+
+            loadNotes() {
+                const savedNotes = localStorage.getItem('notes');
+                if (savedNotes) {
+                    this.notes = JSON.parse(savedNotes).map(note => {
+                        note.creationDate = new Date(note.creationDate);
+                        return note;
+                    });
+                }
+            }
+
+            saveNotes() {
+                localStorage.setItem('notes', JSON.stringify(this.notes));
+            }
+
+            getNotes() {
+                return this.notes;
+            }
+
+            createNote() {
+                const id = Date.now().toString();
+                const newNote = new Note(id, 'Nova Nota', '');
+                this.notes.push(newNote);
+                this.saveNotes();
+                return newNote;
+            }
+
+            getNote(id) {
+                return this.notes.find(note => note.id === id);
+            }
+
+            updateNote(id, title, content) {
+                const note = this.getNote(id);
+                if (note) {
+                    note.title = title;
+                    note.content = content;
+                    this.saveNotes();
+                    return true;
+                }
+                return false;
+            }
+
+            deleteNote(id) {
+                const index = this.notes.findIndex(note => note.id === id);
+                if (index !== -1) {
+                    this.notes.splice(index, 1);
+                    this.saveNotes();
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        class NotesUI {
+            constructor(noteManager) {
+                this.noteManager = noteManager;
+                this.notesList = document.getElementById('notesList');
+                this.noteEditor = document.getElementById('noteEditor');
+                this.noteTitle = document.getElementById('noteTitle');
+                this.noteContent = document.getElementById('noteContent');
+                this.welcomeMessage = document.getElementById('welcomeMessage');
+                this.newNoteBtn = document.getElementById('newNoteBtn');
+                this.saveNoteBtn = document.getElementById('saveNoteBtn');
+                this.deleteNoteBtn = document.getElementById('deleteNoteBtn');
+                this.confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+                
+                this.deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmModal'));
+                
+                this.initEvents();
+                this.updateNotesList();
+            }
+
+            initEvents() {
+                this.newNoteBtn.addEventListener('click', () => this.createNewNote());
+                
+                this.saveNoteBtn.addEventListener('click', () => this.saveCurrentNote());
+                
+                this.deleteNoteBtn.addEventListener('click', () => {
+                    if (this.noteManager.currentNote) {
+                        this.deleteModal.show();
+                    }
+                });
+                
+                this.confirmDeleteBtn.addEventListener('click', () => this.deleteCurrentNote());
+            }
+
+            updateNotesList() {
+                this.notesList.innerHTML = '';
+                const notes = this.noteManager.getNotes();
+                
+                if (notes.length === 0) {
+                    this.notesList.innerHTML = '<p class="text-center text-muted mt-3">Nenhuma nota encontrada</p>';
+                    return;
+                }
+                
+                notes.forEach(note => {
+                    const noteElement = document.createElement('div');
+                    noteElement.className = 'list-group-item note-item';
+                    noteElement.dataset.id = note.id;
+                    
+                    const formattedDate = note.creationDate.toLocaleDateString('pt-BR');
+                    
+                    noteElement.innerHTML = `
+                        <div class="d-flex justify-content-between">
+                            <h5 class="mb-1">${note.title}</h5>
+                            <small>${formattedDate}</small>
+                        </div>
+                        <p class="mb-1 text-truncate">${note.content}</p>
+                    `;
+                    
+                    noteElement.addEventListener('click', () => this.openNote(note.id));
+                    this.notesList.appendChild(noteElement);
+                });
+            }
+
+            createNewNote() {
+                const newNote = this.noteManager.createNote();
+                this.updateNotesList();
+                this.openNote(newNote.id);
+            }
+
+            openNote(id) {
+                const note = this.noteManager.getNote(id);
+                if (note) {
+                    this.noteManager.currentNote = note;
+                    this.noteTitle.value = note.title;
+                    this.noteContent.value = note.content;
+                    
+                    this.welcomeMessage.classList.add('d-none');
+                    this.noteEditor.classList.remove('d-none');
+                    
+                    document.querySelectorAll('.note-item').forEach(item => {
+                        item.classList.remove('active');
+                        if (item.dataset.id === id) {
+                            item.classList.add('active');
+                        }
+                    });
+                }
+            }
+
+            saveCurrentNote() {
+                if (this.noteManager.currentNote) {
+                    const id = this.noteManager.currentNote.id;
+                    const title = this.noteTitle.value.trim() || 'Sem título';
+                    const content = this.noteContent.value;
+                    
+                    this.noteManager.updateNote(id, title, content);
+                    this.updateNotesList();
+                    
+                    this.showFeedback('Nota salva com sucesso!');
+                }
+            }
+
+            deleteCurrentNote() {
+                if (this.noteManager.currentNote) {
+                    const id = this.noteManager.currentNote.id;
+                    this.noteManager.deleteNote(id);
+                    
+                    this.deleteModal.hide();
+                    this.noteEditor.classList.add('d-none');
+                    this.welcomeMessage.classList.remove('d-none');
+                    this.noteManager.currentNote = null;
+                    
+                    this.updateNotesList();
+                }
+            }
+
+            showFeedback(message) {
+                const feedbackElement = document.createElement('div');
+                feedbackElement.className = 'alert alert-success position-fixed bottom-0 end-0 m-3';
+                feedbackElement.textContent = message;
+                document.body.appendChild(feedbackElement);
+                
+                setTimeout(() => {
+                    feedbackElement.remove();
+                }, 2000);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const noteManager = new NoteManager();
+            const notesUI = new NotesUI(noteManager);
+        });
+    </script>
+</body>
+</html>
