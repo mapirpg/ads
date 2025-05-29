@@ -7,12 +7,12 @@ int main() {
     // Armazenar em um vetor M o resultado de cada elemento de A multiplicado pelo valor X.
     // Logo após, imprimir o vetor M
 
-    int A[TAMANHO];
-    int M[TAMANHO];
+    int A[N];
+    int M[N];
     int X;
 
     // Ler o vetor A de 10 números
-    for (int i = 0; i < TAMANHO; i++) {
+    for (int i = 0; i < N; i++) {
         printf("Digite o número para a posição %d do vetor A: ", i + 1);
         scanf("%d", &A[i]);
     }
@@ -22,13 +22,13 @@ int main() {
     scanf("%d", &X);
 
     // Armazenar em um vetor M o resultado de cada elemento de A multiplicado pelo valor X
-    for (int i = 0; i < TAMANHO; i++) {
+    for (int i = 0; i < N; i++) {
         M[i] = A[i] * X;
     }
 
     // Imprimir o vetor M
     printf("Vetor M:\n");
-    for (int i = 0; i < TAMANHO; i++) {
+    for (int i = 0; i < N; i++) {
         printf("%d ", M[i]);
     }
     printf("\n");

@@ -4,9 +4,9 @@
 
 int main() {
     // Vetores de entrada
-    float a[TAMANHO] = {1.0, 2.0, 3.0, 4.0};
-    float b[TAMANHO] = {1.5, 2.5, 3.5, 4.5};
-    float resultado[TAMANHO];  // Vetor para armazenar o resultado
+    float a[N] = {1.0, 2.0, 3.0, 4.0};
+    float b[N] = {1.5, 2.5, 3.5, 4.5};
+    float resultado[N];  // Vetor para armazenar o resultado
     // Carregar os elementos do vetor 'a' em um registrador SIMD
     __m128 vetorA = _mm_loadu_ps(a);
     // Carregar os elementos do vetor 'b' em um registrador SIMD
@@ -17,7 +17,7 @@ int main() {
     _mm_storeu_ps(resultado, vetorResultado);
     // Imprimir o resultado
     printf("Resultado SIMD:\n");
-    for (int i = 0; i < TAMANHO; i++) {
+    for (int i = 0; i < N; i++) {
         printf("%f ", resultado[i]);
     }
     // comando para executar o código

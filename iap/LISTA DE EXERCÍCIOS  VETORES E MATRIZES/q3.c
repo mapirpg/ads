@@ -5,11 +5,11 @@ int main() {
     // Ler um vetor Q de 20 posições (aceitar somente números positivos). Escrever a seguir o
     // valor do menor elemento de Q e a respectiva posição que ele ocupa no vetor
 
-    int Q[TAMANHO];
+    int Q[N];
     int menor, posicao;
 
     // Ler o vetor Q de 20 posições, aceitando apenas números positivos
-    for (int i = 0; i < TAMANHO; i++) {
+    for (int i = 0; i < N; i++) {
         do {
             printf("Digite um número positivo para a posição %d: ", i + 1);
             scanf("%d", &Q[i]);
@@ -24,7 +24,7 @@ int main() {
     posicao = 0;
 
     // Encontrar o menor elemento e sua posição
-    for (int i = 1; i < TAMANHO; i++) {
+    for (int i = 1; i < N; i++) {
         if (Q[i] < menor) {
             menor = Q[i];
             posicao = i;

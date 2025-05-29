@@ -7,11 +7,11 @@ int main() {
     // Ler um vetor Q de 20 posições (aceitar somente números positivos). Escrever a seguir o
     // valor do maior elemento de Q e a respectiva posição que ele ocupa no vetor
 
-    int Q[TAMANHO];
+    int Q[N];
     int maior, posicao;
 
     // Ler o vetor Q de 20 posições, aceitando apenas números positivos
-    for (int i = 0; i < TAMANHO; i++) {
+    for (int i = 0; i < N; i++) {
         do {
             printf("Digite um número positivo para a posição %d: ", i + 1);
             scanf("%d", &Q[i]);
@@ -26,7 +26,7 @@ int main() {
     posicao = 0;
 
     // Encontrar o maior elemento e sua posição
-    for (int i = 1; i < TAMANHO; i++) {
+    for (int i = 1; i < N; i++) {
         if (Q[i] > maior) {
             maior = Q[i];
             posicao = i;
